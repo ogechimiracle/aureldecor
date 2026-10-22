@@ -44,16 +44,16 @@ export function ProjectCard({
             {project.categories.slice(0, 2).map((category) => (
               <Badge
                 key={category}
-                className="border-white/25 bg-ink/40 text-ivory backdrop-blur-sm"
+                className="border-onmedia/25 bg-scrim/40 text-onmedia backdrop-blur-sm"
               >
                 {getCategoryLabel(category)}
               </Badge>
             ))}
           </div>
-          <h3 className="mt-3 font-serif text-2xl leading-tight text-ivory">
+          <h3 className="mt-3 font-serif text-2xl leading-tight text-onmedia">
             {project.title}
           </h3>
-          <p className="mt-1 text-xs uppercase tracking-[0.16em] text-ivory/75">
+          <p className="mt-1 text-xs uppercase tracking-[0.16em] text-onmedia/75">
             {project.location} · {project.propertyType}
           </p>
         </div>

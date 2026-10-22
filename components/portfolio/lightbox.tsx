@@ -71,7 +71,7 @@ export function Lightbox({
             type="button"
             aria-label="Close gallery"
             onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full bg-ink/60 text-ivory backdrop-blur-sm transition-colors hover:bg-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full bg-scrim/60 text-onmedia backdrop-blur-sm transition-colors hover:bg-scrim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
           >
             <span className="sr-only">Close</span>
             <span aria-hidden className="block text-lg leading-none">
@@ -84,7 +84,7 @@ export function Lightbox({
             aria-label="Previous image"
             onClick={() => go(index - 1)}
             disabled={images.length <= 1}
-            className="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-ink/60 text-ivory backdrop-blur-sm transition-colors hover:bg-ink disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+            className="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-scrim/60 text-onmedia backdrop-blur-sm transition-colors hover:bg-scrim disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
           >
             <ChevronLeft className="size-5" />
           </button>
@@ -94,13 +94,13 @@ export function Lightbox({
             aria-label="Next image"
             onClick={() => go(index + 1)}
             disabled={images.length <= 1}
-            className="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-ink/60 text-ivory backdrop-blur-sm transition-colors hover:bg-ink disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+            className="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-scrim/60 text-onmedia backdrop-blur-sm transition-colors hover:bg-scrim disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
           >
             <ChevronRight className="size-5" />
           </button>
         </div>
 
-        <p className="mt-4 text-center text-sm text-ivory/80">
+        <p className="mt-4 text-center text-sm text-onmedia/80">
           {index + 1} / {images.length} — {current.alt}
         </p>
       </DialogContent>

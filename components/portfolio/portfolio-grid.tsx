@@ -4,26 +4,26 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { ProjectCard } from "@/components/portfolio/project-card";
-import { projectCategories } from "@/lib/data/projects";
 import { cn } from "@/lib/utils";
 import type { Project, ProjectCategorySlug } from "@/types";
 
 interface PortfolioGridProps {
   projects: Project[];
+  categories: { slug: string; label: string }[];
 }
 
-const filters: { slug: ProjectCategorySlug | "all"; label: string }[] = [
-  { slug: "all", label: "All Projects" },
-  ...projectCategories.map((category) => ({
-    slug: category.slug as ProjectCategorySlug,
-    label: category.label,
-  })),
-];
-
-export function PortfolioGrid({ projects }: PortfolioGridProps) {
+export function PortfolioGrid({ projects, categories }: PortfolioGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reduceMotion = useReducedMotion();
+
+  const filters: { slug: ProjectCategorySlug | "all"; label: string }[] = [
+    { slug: "all", label: "All Projects" },
+    ...categories.map((category) => ({
+      slug: category.slug as ProjectCategorySlug,
+      label: category.label,
+    })),
+  ];
 
   const raw = searchParams.get("category");
   const active = filters.some((filter) => filter.slug === raw)

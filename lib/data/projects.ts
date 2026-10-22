@@ -590,5 +590,9 @@ export function getRelatedProjects(slug: string, limit = 3) {
 }
 
 export function getCategoryLabel(slug: string) {
-  return projectCategories.find((category) => category.slug === slug)?.label ?? slug;
+  const known = projectCategories.find((category) => category.slug === slug);
+  if (known) return known.label;
+  return slug
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }

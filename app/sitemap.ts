@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/config";
 import { services } from "@/lib/data/services";
-import { projects } from "@/lib/data/projects";
+import { listPublishedProjects } from "@/server/services/projects";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
     "/about",
@@ -26,12 +28,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const projectRoutes = projects.map((project) => ({
-    url: `${siteConfig.url}/portfolio/${project.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }));
+  let projectRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const published = await listPublishedProjects({ pageSize: 500 });
+    projectRoutes = published.items.map((project) => ({
+      url: `${siteConfig.url}/portfolio/${project.slug}`,
+      lastModified: project.updatedAt ?? new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+  } catch {
+    console.error("[sitemap] Could not load published projects.");
+  }
 
   return [...staticRoutes, ...serviceRoutes, ...projectRoutes];
 }

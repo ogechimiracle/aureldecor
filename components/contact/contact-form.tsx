@@ -87,7 +87,8 @@ export function ContactForm({ initialService }: ContactFormProps) {
         }
         if (data?.code === "EMAIL_NOT_CONFIGURED") {
           setServerError(
-            "Our contact form is not connected to an email service yet. Please email the studio directly — you'll find the address on this page.",
+            data.message ??
+              "Our contact form is not connected to an email service yet. Please email the studio directly — you'll find the address on this page.",
           );
           return;
         }
@@ -282,7 +283,7 @@ export function ContactForm({ initialService }: ContactFormProps) {
         type="submit"
         disabled={submitting}
         className={cn(
-          "inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-terracotta px-8 text-xs font-medium uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:bg-terracotta-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta disabled:pointer-events-none disabled:opacity-60",
+          "inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-accent px-8 text-xs font-medium uppercase tracking-[0.18em] text-on-accent transition-colors duration-300 hover:bg-accent-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta disabled:pointer-events-none disabled:opacity-60",
         )}
       >
         {submitting ? "Sending…" : "Send Enquiry"}

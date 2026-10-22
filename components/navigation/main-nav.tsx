@@ -34,11 +34,11 @@ export function MainNav({ tone = "dark", className, onNavigate }: MainNavProps) 
                 className={cn(
                   "relative text-[0.78rem] uppercase tracking-[0.16em] transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
                   tone === "light"
-                    ? "text-ivory/80 hover:text-ivory"
+                    ? "text-onmedia/80 hover:text-onmedia"
                     : "text-ink-soft hover:text-ink",
                   active &&
                     (tone === "light"
-                      ? "text-ivory after:scale-x-100"
+                      ? "text-onmedia after:scale-x-100"
                       : "text-ink after:scale-x-100"),
                 )}
               >

@@ -6,7 +6,13 @@ import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 import { profile } from "@/lib/data/profile";
 
-export function StudioIntro() {
+export function StudioIntro({
+  title = "Design that begins with how you actually live.",
+  body,
+}: {
+  title?: string;
+  body?: string;
+}) {
   return (
     <Container className="py-20 md:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -36,10 +42,10 @@ export function StudioIntro() {
           <Reveal>
             <p className="eyebrow mb-3 text-terracotta">The Studio</p>
             <h2 className="text-balance text-3xl leading-[1.1] sm:text-4xl md:text-[2.75rem]">
-              Design that begins with how you actually live.
+              {title}
             </h2>
             <p className="mt-6 text-pretty leading-relaxed text-ink-soft">
-              {profile.shortBio}
+              {body || profile.shortBio}
             </p>
             <p className="mt-5 text-pretty leading-relaxed text-ink-soft">
               I keep the studio intentionally small so every commission receives

@@ -16,8 +16,8 @@ const siteUrl =
 
 export const siteConfig: SiteConfig = {
   // PLACEHOLDER — replace with the real studio name / wordmark.
-  brandName: "Aurelia Interiors",
-  wordmark: "AURELIA",
+  brandName: "Emiland's Interiors",
+  wordmark: "EMILANDS",
   tagline: "Interiors composed with intention",
   description:
     "A residential and commercial interior design studio crafting warm, architectural and deeply personal spaces — from concept and space planning to final styling.",
@@ -26,12 +26,12 @@ export const siteConfig: SiteConfig = {
   url: siteUrl,
 
   // PLACEHOLDER contact details — replace before launch.
-  email: "studio@aurelia-interiors.example",
-  phone: "+1 (000) 000-0000",
+  email: "emilandsinterior@gmail.com",
+  phone: "+234 (810) 092-1517",
   // Leave empty until a verified WhatsApp Business number is available.
   whatsapp: "",
-  address: "Studio address to be confirmed",
-  serviceArea: "Metropolitan area & surrounding regions",
+  address: "No. 27 Douglas road Owerri Imo State",
+  serviceArea: "Imo Owerri, Nigeria",
 
   // PLACEHOLDER — replace with real profile URLs. Kept as live platform roots
   // so no broken links ship, but they must point at the studio's profiles.

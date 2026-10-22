@@ -6,32 +6,36 @@ interface WordmarkProps {
   className?: string;
   tone?: "dark" | "light";
   withSubline?: boolean;
+  wordmark?: string;
+  brandName?: string;
 }
 
 export function Wordmark({
   className,
   tone = "dark",
   withSubline = true,
+  wordmark = siteConfig.wordmark,
+  brandName = siteConfig.brandName,
 }: WordmarkProps) {
   return (
     <Link
       href="/"
-      aria-label={`${siteConfig.brandName} — home`}
+      aria-label={`${brandName} — home`}
       className={cn("inline-flex flex-col leading-none", className)}
     >
       <span
         className={cn(
           "font-serif text-[1.6rem] tracking-[0.2em]",
-          tone === "light" ? "text-ivory" : "text-ink",
+          tone === "light" ? "text-onmedia" : "text-ink",
         )}
       >
-        {siteConfig.wordmark}
+        {wordmark}
       </span>
       {withSubline ? (
         <span
           className={cn(
             "mt-1 text-[0.5rem] uppercase tracking-[0.44em]",
-            tone === "light" ? "text-ivory/70" : "text-ink-mute",
+            tone === "light" ? "text-onmedia/70" : "text-ink-mute",
           )}
         >
           Interiors

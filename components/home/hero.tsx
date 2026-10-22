@@ -9,7 +9,17 @@ import { pexelsPhoto } from "@/lib/utils";
 
 const heroImage = pexelsPhoto(7546645, { width: 2400, height: 1600 });
 
-export function Hero() {
+interface HeroProps {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}
+
+export function Hero({
+  eyebrow = "Residential & Commercial Interior Design",
+  title = "Spaces Designed to Inspire Living.",
+  description = "A full-service interior design studio creating warm, architectural interiors — considered from the first sketch to the final styled room, and built to be lived in for years.",
+}: HeroProps) {
   const reduceMotion = useReducedMotion();
   const fadeUp = (delay: number) =>
     reduceMotion
@@ -32,30 +42,25 @@ export function Hero() {
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/35"
+        className="absolute inset-0 bg-gradient-to-t from-scrim/85 via-scrim/45 to-scrim/25"
       />
 
       <div className="container-page relative z-10 pb-16 pt-40 md:pb-24">
         <div className="max-w-3xl">
-          <motion.p
-            {...fadeUp(0)}
-            className="eyebrow text-ivory/80"
-          >
-            Residential &amp; Commercial Interior Design
+          <motion.p {...fadeUp(0)} className="eyebrow text-onmedia/80">
+            {eyebrow}
           </motion.p>
           <motion.h1
             {...fadeUp(0.08)}
-            className="mt-6 text-balance font-serif text-4xl leading-[1.05] text-ivory sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mt-6 text-balance font-serif text-4xl leading-[1.05] text-onmedia sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Spaces Designed to Inspire Living.
+            {title}
           </motion.h1>
           <motion.p
             {...fadeUp(0.16)}
-            className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-ivory/85 md:text-lg"
+            className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-onmedia/85 md:text-lg"
           >
-            A full-service interior design studio creating warm, architectural
-            interiors — considered from the first sketch to the final styled
-            room, and built to be lived in for years.
+            {description}
           </motion.p>
           <motion.div
             {...fadeUp(0.24)}

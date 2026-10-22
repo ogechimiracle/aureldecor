@@ -36,7 +36,7 @@ export function MobileNav({ tone = "dark" }: MobileNavProps) {
           className={cn(
             "inline-flex size-11 items-center justify-center rounded-sm transition-colors lg:hidden",
             tone === "light"
-              ? "text-ivory hover:bg-white/10"
+              ? "text-onmedia hover:bg-onmedia/10"
               : "text-ink hover:bg-sand/70",
           )}
         >
@@ -45,7 +45,7 @@ export function MobileNav({ tone = "dark" }: MobileNavProps) {
       </DialogPrimitive.Trigger>
 
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out lg:hidden" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-scrim/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out lg:hidden" />
         <DialogPrimitive.Content
           className="fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col bg-ivory shadow-soft outline-none data-[state=open]:animate-in data-[state=closed]:animate-out lg:hidden"
         >

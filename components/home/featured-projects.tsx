@@ -5,12 +5,14 @@ import { ProjectCard } from "@/components/portfolio/project-card";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Button } from "@/components/ui/button";
-import { getFeaturedProjects } from "@/lib/data/projects";
+import { getFeaturedProjects } from "@/server/services/projects";
 
 const aspects = ["aspect-4/5", "aspect-3/4", "aspect-square", "aspect-4/5", "aspect-3/4", "aspect-square"];
 
-export function FeaturedProjects() {
-  const projects = getFeaturedProjects();
+export async function FeaturedProjects() {
+  const projects = await getFeaturedProjects(6);
+
+  if (projects.length === 0) return null;
 
   return (
     <Container className="py-20 md:py-28">

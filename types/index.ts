@@ -68,13 +68,11 @@ export interface ServiceProcessStep {
   detail: string;
 }
 
-export type ProjectCategorySlug =
-  | "residential"
-  | "commercial"
-  | "bedroom"
-  | "living-room"
-  | "kitchen"
-  | "renovation";
+/**
+ * Category slugs are stored in SQLite and may be created by the owner, so the
+ * slug type is an open string (the original built-in slugs remain valid).
+ */
+export type ProjectCategorySlug = string;
 
 export interface ProjectCategory {
   slug: ProjectCategorySlug;
@@ -133,6 +131,27 @@ export interface ProcessStep {
   step: string;
   title: string;
   description: string;
+}
+
+/** Resolved video presentation for a project detail page. */
+export type ProjectVideo =
+  | { kind: "youtube"; id: string }
+  | { kind: "vimeo"; id: string }
+  | { kind: "direct"; url: string }
+  | { kind: "file"; src: string; poster: string | null }
+  | null;
+
+/**
+ * A project as served to the public site: the static Project shape plus the
+ * fields that only exist once content lives in SQLite.
+ */
+export interface PublicProject extends Project {
+  id: string;
+  status: "draft" | "published";
+  mediaType: "image" | "video" | "mixed";
+  video?: ProjectVideo;
+  publishedAt?: Date | null;
+  updatedAt?: Date;
 }
 
 export interface ContactChannel {
