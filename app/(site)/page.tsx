@@ -21,7 +21,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <JsonLd
+      {/* <JsonLd
         data={professionalServiceJsonLd({
           name: settings.brand.brandName,
           description: seo.seoDescription || settings.brand.description,
@@ -31,7 +31,7 @@ export default async function HomePage() {
           serviceArea: contact.serviceArea || undefined,
           social: settings.social,
         })}
-      />
+      /> */}
       <Hero
         eyebrow={home.heroEyebrow || undefined}
         title={home.heroTitle || undefined}
