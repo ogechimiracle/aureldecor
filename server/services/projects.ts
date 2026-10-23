@@ -653,8 +653,8 @@ export async function createProject(
   const now = new Date();
 
   try {
-    db.transaction((tx) => {
-      tx.insert(projectsTable)
+    await db.transaction(async (tx) => {
+      await tx.insert(projectsTable)
         .values({
           id,
           title: input.title,
@@ -684,7 +684,7 @@ export async function createProject(
         })
         .run();
 
-      tx.insert(projectCategoriesTable)
+      await tx.insert(projectCategoriesTable)
         .values(
           categoryCheck.ids.map((categoryId) => ({
             projectId: id,
@@ -696,7 +696,7 @@ export async function createProject(
 
       if (items.length > 0) {
         for (const [index, item] of items.entries()) {
-          tx.update(mediaTable)
+          await tx.update(mediaTable)
             .set({ projectId: id, sortOrder: index })
             .where(eq(mediaTable.id, item.id))
             .run();
@@ -762,8 +762,8 @@ export async function updateProject(
   const now = new Date();
 
   try {
-    db.transaction((tx) => {
-      tx.update(projectsTable)
+    await db.transaction(async (tx) => {
+      await tx.update(projectsTable)
         .set({
           title: input.title,
           slug: input.slug,
@@ -795,11 +795,11 @@ export async function updateProject(
         .where(eq(projectsTable.id, id))
         .run();
 
-      tx.delete(projectCategoriesTable)
+      await tx.delete(projectCategoriesTable)
         .where(eq(projectCategoriesTable.projectId, id))
         .run();
 
-      tx.insert(projectCategoriesTable)
+      await tx.insert(projectCategoriesTable)
         .values(
           categoryCheck.ids.map((categoryId) => ({
             projectId: id,
@@ -811,7 +811,7 @@ export async function updateProject(
 
       if (items.length > 0) {
         for (const [index, item] of items.entries()) {
-          tx.update(mediaTable)
+          await tx.update(mediaTable)
             .set({ projectId: id, sortOrder: index })
             .where(eq(mediaTable.id, item.id))
             .run();
@@ -819,7 +819,7 @@ export async function updateProject(
       }
 
       if (removedMedia.length > 0) {
-        tx.delete(mediaTable)
+        await tx.delete(mediaTable)
           .where(
             inArray(
               mediaTable.id,
@@ -863,8 +863,8 @@ export async function deleteProject(id: string): Promise<ActionResult> {
     .where(eq(mediaTable.projectId, id));
 
   try {
-    db.transaction((tx) => {
-      tx.delete(projectsTable).where(eq(projectsTable.id, id)).run();
+    await db.transaction(async (tx) => {
+      await tx.delete(projectsTable).where(eq(projectsTable.id, id)).run();
     });
   } catch (error) {
     console.error("[projects] delete failed", error);
@@ -939,13 +939,13 @@ export async function removeProjectMedia(
   if (rows.length === 0) return { ok: true };
 
   try {
-    db.transaction((tx) => {
+    await db.transaction(async (tx) => {
       for (const row of rows) {
-        tx.delete(mediaTable).where(eq(mediaTable.id, row.id)).run();
+        await tx.delete(mediaTable).where(eq(mediaTable.id, row.id)).run();
       }
       // Clear dangling cover reference.
       const coverIds = rows.map((row) => row.id);
-      tx.update(projectsTable)
+      await tx.update(projectsTable)
         .set({ coverMediaId: null })
         .where(
           and(

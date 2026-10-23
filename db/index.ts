@@ -1,18 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import Database from "better-sqlite3";
-import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { pathToFileURL } from "node:url";
+import { createClient } from "@libsql/client";
+import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-export type AppDatabase = BetterSQLite3Database<typeof schema>;
-
-interface DatabaseHandle {
-  db: AppDatabase;
-  sqlite: Database.Database;
-}
+export type AppDatabase = LibSQLDatabase<typeof schema>;
 
 /**
- * Resolve the SQLite database file location.
+ * Resolve the local SQLite database file location.
  * Override with `DATABASE_FILE` (relative paths resolve from the working dir).
  */
 export function resolveDatabaseFile(): string {
@@ -21,36 +17,39 @@ export function resolveDatabaseFile(): string {
   return path.resolve(process.cwd(), "data", "app.db");
 }
 
-/** Open (and configure) a SQLite database at the given file path. */
-export function createDatabase(file: string = resolveDatabaseFile()): DatabaseHandle {
+function createAppDatabase(): AppDatabase {
+  const url = process.env.TURSO_DATABASE_URL?.trim();
+  const authToken = process.env.TURSO_AUTH_TOKEN?.trim();
+
+  if (url && !authToken) {
+    throw new Error("TURSO_AUTH_TOKEN is required when TURSO_DATABASE_URL is set.");
+  }
+  if (!url && process.env.NODE_ENV === "production") {
+    throw new Error(
+      "TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are required for production database access.",
+    );
+  }
+
+  if (url) {
+    return drizzle(createClient({ url, authToken }), { schema });
+  }
+
+  const file = resolveDatabaseFile();
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  const sqlite = new Database(file);
-  sqlite.pragma("journal_mode = WAL");
-  sqlite.pragma("foreign_keys = ON");
-  const db = drizzle(sqlite, { schema });
-  return { db, sqlite };
+  return drizzle(createClient({ url: pathToFileURL(file).href }), { schema });
 }
 
 // Cache the connection across dev hot-reloads so we don't leak handles.
 const globalForDb = globalThis as unknown as {
-  __internaldecorDatabase?: DatabaseHandle;
+  __internaldecorDatabase?: AppDatabase;
 };
 
-function ensureDatabase(): DatabaseHandle {
+/** LibSQL client for the local SQLite database or configured Turso database. */
+export function getDb(): AppDatabase {
   if (!globalForDb.__internaldecorDatabase) {
-    globalForDb.__internaldecorDatabase = createDatabase();
+    globalForDb.__internaldecorDatabase = createAppDatabase();
   }
   return globalForDb.__internaldecorDatabase;
-}
-
-/** Lazily obtained Drizzle client (server-only). */
-export function getDb(): AppDatabase {
-  return ensureDatabase().db;
-}
-
-/** Raw better-sqlite3 handle — used by the migration runner and tests. */
-export function getRawDb(): Database.Database {
-  return ensureDatabase().sqlite;
 }
 
 export { schema };

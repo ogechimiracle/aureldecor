@@ -7,7 +7,8 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import { getDb, getRawDb } from "../db";
+import { getDb } from "../db";
+import { getLocalDb, getRawDb } from "../db/local";
 import {
   categories as categoriesTable,
   media as mediaTable,
@@ -20,7 +21,7 @@ import type { ImageAsset } from "../types";
 const MIGRATIONS_FOLDER = path.join(__dirname, "..", "db", "migrations");
 
 export function applyMigrations(): void {
-  const db = getDb();
+  const db = getLocalDb();
   migrate(db, { migrationsFolder: MIGRATIONS_FOLDER });
 }
 
@@ -169,8 +170,8 @@ export async function seedIfEmpty(): Promise<SeedResult> {
       registerMedia(asset, galleryIndex + 1);
     });
 
-    await db.transaction((tx) => {
-      tx.insert(projectsTable)
+    await db.transaction(async (tx) => {
+      await tx.insert(projectsTable)
         .values({
           id: projectId,
           title: project.title,
@@ -200,7 +201,7 @@ export async function seedIfEmpty(): Promise<SeedResult> {
         })
         .run();
 
-      tx.insert(projectCategoriesTable)
+      await tx.insert(projectCategoriesTable)
         .values(
           categoryIds.map((entry) => ({
             projectId,
@@ -211,10 +212,10 @@ export async function seedIfEmpty(): Promise<SeedResult> {
         .run();
 
       if (mediaRows.length > 0) {
-        tx.insert(mediaTable).values(mediaRows).run();
+        await tx.insert(mediaTable).values(mediaRows).run();
       }
 
-      tx.update(projectsTable)
+      await tx.update(projectsTable)
         .set({ coverMediaId, updatedAt: createdAt })
         .where(eq(projectsTable.id, projectId))
         .run();

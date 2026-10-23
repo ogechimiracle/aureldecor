@@ -31,6 +31,7 @@ validated, email-delivering contact form.
 - **SEO** — per-page metadata, canonical URLs, Open Graph/Twitter cards,
   sitemap, robots.txt, JSON-LD structured data (`ProfessionalService`),
   semantic markup, optimised fonts and images
+- **Database** — local SQLite for development and Turso/libSQL for Vercel
 - **Accessibility** — skip link, keyboard-navigable menus/dialogs, focus
   indicators, ARIA throughout, reduced-motion support
 - Next.js image optimisation (remote host configured), AVIF/WebP formats
@@ -56,6 +57,7 @@ validated, email-delivering contact form.
 
 - Node.js **20.9+** (built and tested on Node 22)
 - npm 10+
+- A [Turso](https://turso.tech) database for production deployments
 - A [Resend](https://resend.com) account for contact-form delivery
 
 ## Installation
@@ -86,6 +88,9 @@ npm run lint    # ESLint
 | Variable               | Required | Purpose                                          |
 | ---------------------- | -------- | ------------------------------------------------ |
 | `NEXT_PUBLIC_SITE_URL` | Yes      | Canonical site URL for SEO, sitemap, OG, robots  |
+| `TURSO_DATABASE_URL`   | Production | Turso/libSQL database URL                       |
+| `TURSO_AUTH_TOKEN`     | Production | Server-only Turso authentication token           |
+| `DATABASE_FILE`        | No       | Local SQLite path; defaults to `data/app.db`      |
 | `RESEND_API_KEY`       | For email| Resend API key (never exposed to the browser)    |
 | `CONTACT_FROM_EMAIL`   | For email| Verified sender address in Resend               |
 | `CONTACT_TO_EMAIL`     | For email| Studio inbox that receives enquiries            |
@@ -93,6 +98,24 @@ npm run lint    # ESLint
 > When email variables are missing, the `/api/contact` route returns a clear
 > `503 EMAIL_NOT_CONFIGURED` response and the form tells visitors to email the
 > studio directly — no fake success message is ever shown.
+
+Local development uses SQLite. Production requires both Turso variables;
+the app intentionally fails with a configuration error rather than silently
+creating an empty, non-persistent SQLite database on Vercel.
+
+## Setting up the production database
+
+1. Create a Turso database and generate an auth token.
+2. Put `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env.local` for the
+   one-time import, and add the same values to the Vercel project’s Production
+   environment variables.
+3. Run `npm run db:setup:turso` once. It applies the committed migrations and
+   copies the current local SQLite content into an empty Turso database. It
+   refuses to copy into a database that already contains content.
+4. Redeploy after setting the Vercel variables.
+
+The setup command requires the local `data/app.db` file and `better-sqlite3`,
+which is kept as a development dependency for local database maintenance only.
 
 ## Configuring email delivery
 
